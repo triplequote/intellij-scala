@@ -20,7 +20,6 @@ import org.jetbrains.plugins.scala.caches.ScalaShortNamesCacheManager
 import org.jetbrains.plugins.scala.extensions._
 import org.jetbrains.plugins.scala.lang.lexer.ScalaTokenTypes
 import org.jetbrains.plugins.scala.lang.parser.ScalaElementTypes
-import org.jetbrains.plugins.scala.lang.psi.ScalaPsiElement.ElementScope
 import org.jetbrains.plugins.scala.lang.psi.ScalaPsiUtil.isLineTerminator
 import org.jetbrains.plugins.scala.lang.psi.api.base.types.ScSelfTypeElement
 import org.jetbrains.plugins.scala.lang.psi.api.expr.ScNewTemplateDefinition
@@ -378,7 +377,7 @@ trait ScTemplateDefinition extends ScNamedElement with PsiClass with Typeable {
   }
 
   def addMember(member: ScMember, anchor: Option[PsiElement]): ScMember = {
-    implicit val manager = member.getManager
+    implicit val projectContext = member.projectContext
     extendsBlock.templateBody.map {
       _.getNode
     }.map { node =>
