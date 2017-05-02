@@ -43,7 +43,8 @@ abstract class ScalaInspectionTestBase extends ScalaLightCodeInsightFixtureTestA
   }
 
   protected final def configureByText(text: String, descriptionMatcher: String => Boolean): Seq[(HighlightInfo, TextRange)] = {
-    val (normalizedText, offset) = findCaretOffset(text, stripTrailingSpaces = true)
+    val testText = createTestText(text)
+    val (normalizedText, offset) = findCaretOffset(testText, stripTrailingSpaces = true)
 
     val fixture = getFixture
     fixture.configureByText("dummy.scala", normalizedText)
@@ -55,6 +56,8 @@ abstract class ScalaInspectionTestBase extends ScalaLightCodeInsightFixtureTestA
       .map(info => (info, highlightedRange(info)))
       .filter(checkOffset(_, offset))
   }
+
+  protected def createTestText(text: String): String = text
 }
 
 object ScalaInspectionTestBase {
