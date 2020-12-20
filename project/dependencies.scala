@@ -233,7 +233,7 @@ object DependencyGroups {
       sbtOrg % "main-settings" % v
     )
 
-  val sbt1CrossScala: CrossVersion = CrossVersion.fullMapped(_ => Scala.binary_2_12)
+  val sbt1CrossScala: CrossVersion = CrossVersion.constant(Scala.binary_2_12)
   def sbt100Libs(v:String): Seq[ModuleID] =
     // these are not cross-versioned
     Seq("sbt", "util-interface", "test-agent").map(lib => sbtOrg % lib % v) ++

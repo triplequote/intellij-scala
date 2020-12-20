@@ -22,8 +22,8 @@ object Packaging {
 
   def packagePlugin(mappings: Seq[(File, String)], destination: File): Unit = {
     val (dirs, files) = mappings.partition(_._1.isDirectory)
-    val toRemove = destination.***.get.toSet -- files.map(_._1)
-    IO.delete(toRemove)
+    //val toRemove = destination.***.get.toSet -- files.map(_._1)
+    //IO.delete(toRemove)
 
     dirs.foreach { case (from, to) =>
       IO.copyDirectory(from, destination / to, overwrite = false, preserveLastModified = true) }
@@ -37,8 +37,8 @@ object Packaging {
     zipFile
   }
 
-  def compressPackagedPlugin(source: File, destination: File): Unit =
-    IO.zip((source.getParentFile ***) pair (relativeTo(source.getParentFile), false), destination)
+  def compressPackagedPlugin(source: File, destination: File): Unit = ()
+    //IO.zip((source.getParentFile ***) pair (relativeTo(source.getParentFile), false), destination)
 
   import PackageEntry._
 
@@ -70,8 +70,8 @@ object Packaging {
     val name = moduleId.name
     moduleId.crossVersion match {
       case Disabled => name
-      case f: Full => name + "_" + f.remapVersion(scalaVersion)
-      case b: Binary => name + "_" + b.remapVersion(Versions.Scala.binaryVersion(scalaVersion))
+      case f: Full => name + "_" //+ f.remapVersion(scalaVersion)
+      case b: Binary => name + "_" //+ b.remapVersion(Versions.Scala.binaryVersion(scalaVersion))
     }
   }
 

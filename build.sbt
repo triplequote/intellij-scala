@@ -1,7 +1,6 @@
 import java.io.File
 
 import Common._
-import com.dancingrobot84.sbtidea.tasks.{UpdateIdea => updateIdeaTask}
 import sbt.Keys.{`package` => pack}
 import sbtide.Keys.ideSkipProject
 
@@ -9,7 +8,8 @@ import sbtide.Keys.ideSkipProject
 
 resolvers in ThisBuild ++=
   BintrayJetbrains.allResolvers :+
-  Resolver.typesafeIvyRepo("releases")
+  Resolver.typesafeIvyRepo("releases") //:+
+  //Resolver.sonatypeRepo("releases")
 
 resolvers in ThisBuild += Resolver.sonatypeRepo("snapshots")
 
@@ -100,7 +100,7 @@ lazy val runners =
   .settings(
     libraryDependencies ++= DependencyGroups.runners,
     // WORKAROUND fixes build error in sbt 0.13.12+ analogously to https://github.com/scala/scala/pull/5386/
-    ivyScala ~= (_ map (_ copy (overrideScalaVersion = false)))
+    //ivyScala ~= (_ map (_ copy (overrideScalaVersion = false)))
   )
 
 lazy val nailgunRunners =
@@ -174,13 +174,13 @@ lazy val testDownloader =
     conflictManager := ConflictManager.all,
     conflictWarning := ConflictWarning.disable,
     resolvers ++= Seq(
-      "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases",
+      "Scalaz Bintray Repo" at "https://dl.bintray.com/scalaz/releases",
       "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/"
     ),
     libraryDependencies ++= DependencyGroups.testDownloader,
     libraryDependencies ++= DependencyGroups.mockSbtDownloader,
     libraryDependencies ++= DependencyGroups.testScalaLibraryDownloader,
-    dependencyOverrides ++= Set(
+    dependencyOverrides ++= Seq(
       "com.chuusai" % "shapeless_2.11" % "2.0.0"
     ),
     update := update.dependsOn(update.in(sbtLaunchTestDownloader)).value,
@@ -327,13 +327,7 @@ lazy val pluginPackagerCommunity =
           "lib/scala-library.jar"),
         Library(bcel,
           "lib/bcel.jar")
-      ) ++
-        crossLibraries.map { lib =>
-          Library(
-            lib.copy(name = Packaging.crossName(lib, scalaVersion.value)),
-            s"lib/${lib.name}.jar"
-          )
-        }
+      ) 
 
       Packaging.convertEntriesToMappings(
         jps ++ lib ++ launcher,
@@ -372,13 +366,14 @@ updateIdea := {
   val build = ideaBuild.in(ThisBuild).value
 
   try {
-    updateIdeaTask(baseDir, IdeaEdition.Community, build, downloadSources = true, Seq.empty, streams.value)
+    ()
+    //updateIdeaTask(baseDir, IdeaEdition.Community, build, downloadSources = true, Seq.empty, streams.value)
   } catch {
     case e : sbt.TranslatedException if e.getCause.isInstanceOf[java.io.FileNotFoundException] =>
       val newBuild = build.split('.').init.mkString(".") + "-EAP-CANDIDATE-SNAPSHOT"
       streams.value.log.warn(s"Failed to download IDEA $build, trying $newBuild")
       IO.deleteIfEmpty(Set(baseDir))
-      updateIdeaTask(baseDir, IdeaEdition.Community, newBuild, downloadSources = true, Seq.empty, streams.value)
+      //updateIdeaTask(baseDir, IdeaEdition.Community, newBuild, downloadSources = true, Seq.empty, streams.value)
   }
 }
 

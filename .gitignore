@@ -18,3 +18,8 @@ target/
 scala/scala-impl/testdata/debugger
 scala/scala-impl/testdata/projects
 scala/scala-impl/testdata/testingSupport
+
+.bsp
+.hydra
+.metals
+.vscode
