@@ -174,7 +174,7 @@ lazy val testDownloader =
     conflictManager := ConflictManager.all,
     conflictWarning := ConflictWarning.disable,
     resolvers ++= Seq(
-      "Scalaz Bintray Repo" at "https://dl.bintray.com/scalaz/releases",
+      "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases",
       "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/"
     ),
     libraryDependencies ++= DependencyGroups.testDownloader,
